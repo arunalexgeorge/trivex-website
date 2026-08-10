@@ -1,0 +1,8 @@
+.DS_Store
+**/.DS_Store
+.pdf_render/
+node_modules/
+doc.pdf
+extracted_images/
+client_data/
+.claude/
