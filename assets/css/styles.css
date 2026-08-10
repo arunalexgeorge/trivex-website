@@ -183,7 +183,7 @@ h1,h2,h3,h4 { line-height: 1.08; font-weight: 700; letter-spacing: -0.015em; }
 .tlogo { display: block; width: auto; height: auto; fill: currentColor; }
 .tlogo use { fill: currentColor; }
 .brand { display: inline-flex; align-items: center; flex: 0 0 auto; }
-.brand__logo { height: 26px; width: auto; color: #fff; transition: color .3s var(--ease); }
+.brand__logo { height: 26px; width: auto; color: var(--green); transition: color .3s var(--ease); }
 .site-header.is-stuck .brand__logo { color: var(--green); }
 
 .nav-pill {
@@ -241,11 +241,11 @@ body.menu-open { overflow: hidden; }
 
 /* ---------- 6. Splash intro ---------- */
 #splash {
-  position: fixed; inset: 0; z-index: 2000; background: var(--green);
+  position: fixed; inset: 0; z-index: 2000; background: #fff;
   display: grid; place-items: center;
   transition: opacity .6s var(--ease), visibility .6s var(--ease);
 }
-#splash .splash-mark { width: clamp(190px, 42vw, 340px); height: auto; color: #fff; animation: splashPop .8s var(--ease) both; }
+#splash .splash-mark { width: clamp(190px, 42vw, 340px); height: auto; color: var(--green); animation: splashPop .8s var(--ease) both; }
 #splash.is-hidden { opacity: 0; visibility: hidden; }
 @keyframes splashPop { 0% { opacity: 0; transform: scale(.7) } 55% { opacity: 1 } 100% { transform: scale(1) } }
 
@@ -437,7 +437,7 @@ body.menu-open { overflow: hidden; }
 .planet__badge b { font-size: 1.8rem; font-weight: 800; display: block; }
 .planet__badge span { font-size: var(--fs-sm); color: rgba(255,255,255,.85); }
 .planet__powered { position: absolute; right: var(--gutter); bottom: 1.2rem; display: flex; align-items: center; gap: .5rem; font-size: var(--fs-xs); color: rgba(255,255,255,.8); z-index: 1; }
-.planet__logo { height: 15px; width: auto; color: rgba(255,255,255,.9); }
+.planet__logo { height: 15px; width: auto; color: var(--green-bright); }
 
 /* ---------- 14. Contact ---------- */
 .contact { position: relative; background: linear-gradient(180deg, var(--surface) 0%, var(--panel) 100%); overflow: hidden; }
@@ -473,7 +473,7 @@ body.menu-open { overflow: hidden; }
 .site-footer { background: var(--ink); color: rgba(255,255,255,.72); padding-block: clamp(3rem,6vw,5rem) 2rem; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: clamp(1.5rem, 3vw, 3rem); }
 .footer-brand p { max-width: 34ch; font-size: var(--fs-sm); }
-.footer-brand .footer-word { height: 26px; width: auto; color: #fff; margin-bottom: 1.1rem; }
+.footer-brand .footer-word { height: 26px; width: auto; color: var(--green-bright); margin-bottom: 1.1rem; }
 .footer-col h4 { color: #fff; font-size: var(--fs-sm); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 1.1rem; font-weight: 700; }
 .footer-col a { display: block; padding: .3rem 0; font-size: var(--fs-sm); transition: color .2s var(--ease); }
 .footer-col a:hover { color: #fff; }

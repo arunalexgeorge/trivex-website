@@ -1,8 +1,11 @@
-.DS_Store
-**/.DS_Store
+# scratch / tooling
 .pdf_render/
 node_modules/
+**/.DS_Store
+.DS_Store
+.claude/
+# large source materials (not needed to serve the site)
 doc.pdf
 extracted_images/
 client_data/
-.claude/
+lh*.json

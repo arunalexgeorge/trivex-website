@@ -14,10 +14,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BASE   = os.environ.get("BASE_PATH", "").rstrip("/")
 SITE   = os.environ.get("SITE_URL", "https://www.trivexindustrialsolutions.com").rstrip("/")
 YEAR   = 2025
-PHONE_DISPLAY = "+971 50 308 8311"
-PHONE_TEL     = "+971503088311"
+PHONE_DISPLAY = "+971 50 102 6160"
+PHONE_TEL     = "+971501026160"
 EMAIL  = "sales@trivexindustrialsolutions.com"
-WHATSAPP_NUMBER = "971503088311"           # international format, no +/spaces
+WHATSAPP_NUMBER = "971501026160"           # international format, no +/spaces
 ADDRESS = "Warehouse Q4-169, SAIF Zone, Sharjah, United Arab Emirates"
 
 # Vectorised wordmark logo (traced from client_data/logo_green.jpeg)
@@ -1243,7 +1243,7 @@ def page_contact():
   </section>
 '''
     h = head("Contact | Trivex Industrial Solutions — Sharjah, UAE",
-             "Contact Trivex Industrial Solutions FZC — SAIF Zone, Sharjah, UAE. Request a quote for industrial products, fabrication, installation or maintenance. Call +971 50 308 8311.",
+             "Contact Trivex Industrial Solutions FZC — SAIF Zone, Sharjah, UAE. Request a quote for industrial products, fabrication, installation or maintenance. Call +971 50 102 6160.",
              "/contact/", ld=bc_ld)
     write("/contact/", shell(h, body, "contact", wa_msg="Hello, I would like to get in touch with Trivex."))
     PAGES.append(("/contact/","0.8"))
@@ -1253,13 +1253,17 @@ def build_sitemap():
     xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n'
     open(os.path.join(ROOT,"sitemap.xml"),"w").write(xml)
 
+def build_robots():
+    open(os.path.join(ROOT,"robots.txt"),"w").write(
+        f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
+
 def main():
     page_home(); page_about(); page_products()
     for p in PRODUCTS: page_product(p)
     page_services()
     for s in SERVICES: page_service(s)
     page_industries(); page_projects(); page_contact()
-    build_sitemap()
+    build_sitemap(); build_robots()
     print(f"Built {len(PAGES)} pages:")
     print(f"  1 home + about + products({len(PRODUCTS)}) + services({len(SERVICES)}) + industries + projects + contact")
     print(f"  sitemap.xml with {len(PAGES)} URLs")
