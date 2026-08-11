@@ -34,6 +34,11 @@ def wa_link(msg):
     from urllib.parse import quote
     return f"https://wa.me/{WHATSAPP_NUMBER}?text={quote(msg)}"
 
+def prod_img(slug):
+    """Product image URL — prefer a transparent .png when one exists, else .jpg."""
+    ext = ".png" if os.path.exists(os.path.join(ROOT, "assets", "img", "products", f"{slug}.png")) else ".jpg"
+    return f"/assets/img/products/{slug}{ext}"
+
 # ---------- SVG icons ----------
 def _svg(body, sw="1.8"):
     return (f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{sw}" '
@@ -573,7 +578,7 @@ def cta_section(title, sub, primary=("Request a quote","/contact/"), whatsapp_ms
 def product_card(p, reveal=True):
     return f'''<a class="product-card{' reveal' if reveal else ''}" href="/products/{p['slug']}/" data-cat="{p['cat']}" aria-label="{esc(p['name'])}">
   <div class="product-card__media">
-    <img src="/assets/img/products/{p['slug']}.jpg" alt="{esc(p['name'])} — Trivex Industrial Solutions" loading="lazy" decoding="async" width="820" height="615">
+    <img src="{prod_img(p['slug'])}" alt="{esc(p['name'])} — Trivex Industrial Solutions" loading="lazy" decoding="async" width="820" height="615">
     <span class="product-card__cat">{CAT_LABEL[p['cat']]}</span>
   </div>
   <div class="product-card__body"><h3>{p['name']}</h3><p>{p['short']}</p>
@@ -608,7 +613,7 @@ def bento_tile(t, href, kind):
 def home_product_card(p):
     return (f'<a class="product-card reveal" href="/products/{p["slug"]}/" data-cat="{p["cat"]}" aria-label="{esc(p["name"])}">'
             f'<div class="product-card__media">'
-            f'<img src="/assets/img/products/{p["slug"]}.jpg" alt="{esc(p["name"])} — Trivex Industrial Solutions" loading="lazy" decoding="async" width="820" height="615">'
+            f'<img src="{prod_img(p["slug"])}" alt="{esc(p["name"])} — Trivex Industrial Solutions" loading="lazy" decoding="async" width="820" height="615">'
             f'<span class="plus" aria-hidden="true">{IC["plus"]}</span></div>'
             f'<div class="product-card__body"><h3>{p["name"]}</h3><p>{p["short"]}</p></div></a>')
 
@@ -1011,7 +1016,7 @@ def page_product(p):
   {bc}
   <section class="pd-hero">
     <div class="container container--wide pd-hero__grid">
-      <div class="pd-hero__media reveal"><img src="/assets/img/products/{p['slug']}.jpg" alt="{esc(p['name'])} — Trivex Industrial Solutions" width="820" height="615" fetchpriority="high"></div>
+      <div class="pd-hero__media reveal"><img src="{prod_img(p['slug'])}" alt="{esc(p['name'])} — Trivex Industrial Solutions" width="820" height="615" fetchpriority="high"></div>
       <div class="pd-hero__body reveal" data-delay="1">
         <span class="eyebrow">{CAT_LABEL[p['cat']]}</span>
         <h1>{p['name']}</h1>
@@ -1054,12 +1059,12 @@ def page_product(p):
 '''
     prod_ld = {"@context":"https://schema.org","@type":"Product","name":p["name"],
         "description":p["long"],"category":CAT_LABEL[p["cat"]],
-        "image":SITE+f"/assets/img/products/{p['slug']}.jpg",
+        "image":SITE+prod_img(p['slug']),
         "brand":{"@type":"Brand","name":"Trivex Industrial Solutions"},
         "url":SITE+f"/products/{p['slug']}/"}
     h = head(f"{p['name']} | Trivex Industrial Solutions",
              f"{p['name']} — {p['short']}. {p['long'][:120]}",
-             f"/products/{p['slug']}/", og_image=f"/assets/img/products/{p['slug']}.jpg",
+             f"/products/{p['slug']}/", og_image=prod_img(p['slug']),
              ld={"@context":"https://schema.org","@graph":[bc_ld, prod_ld, faq_ld]})
     write(f"/products/{p['slug']}/", shell(h, body, "products", wa_msg=wa_msg))
     PAGES.append((f"/products/{p['slug']}/","0.7"))
