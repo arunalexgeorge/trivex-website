@@ -14,10 +14,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BASE   = os.environ.get("BASE_PATH", "").rstrip("/")
 SITE   = os.environ.get("SITE_URL", "https://www.trivexindustrialsolutions.com").rstrip("/")
 YEAR   = 2025
-PHONE_DISPLAY = "+971 50 102 6160"
-PHONE_TEL     = "+971501026160"
+PHONE_DISPLAY = "+971 6 534 6311"
+PHONE_TEL     = "+97165346311"
+PHONE2_DISPLAY = "+971 50 584 0555"        # second number (no WhatsApp)
+PHONE2_TEL     = "+971505840555"
 EMAIL  = "sales@trivexindustrialsolutions.com"
-WHATSAPP_NUMBER = "971501026160"           # international format, no +/spaces
+WHATSAPP_NUMBER = "97165346311"            # international format, no +/spaces
 ADDRESS = "Warehouse Q4-169, SAIF Zone, Sharjah, United Arab Emirates"
 
 # Vectorised wordmark logo (traced from client_data/logo_green.jpeg)
@@ -516,7 +518,7 @@ def mobile_menu(active):
     <a href="/contact/" class="mm-link">Contact</a>
     <a href="/contact/" class="btn btn--solid" style="margin-top:1.5rem">Get a quote {IC['arrow']}</a>
   </div>
-  <div class="mobile-menu__foot">TRIVEX Industrial Solutions FZC · SAIF Zone, Sharjah, UAE<br><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></div>
+  <div class="mobile-menu__foot">TRIVEX Industrial Solutions FZC · SAIF Zone, Sharjah, UAE<br><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a> · <a href="tel:{PHONE2_TEL}">{PHONE2_DISPLAY}</a></div>
 </nav>'''
 
 def whatsapp(msg):
@@ -650,6 +652,7 @@ def footer():
         <p>Complete industrial solutions — engineering, manufacturing, supply, installation and maintenance for water, wastewater, oil &amp; gas and heavy industry. Based in SAIF Zone, Sharjah, UAE.</p>
         <div class="footer-contact-inline">
           <a href="tel:{PHONE_TEL}">{IC['phone']} {PHONE_DISPLAY}</a>
+          <a href="tel:{PHONE2_TEL}">{IC['phone']} {PHONE2_DISPLAY}</a>
           <a href="mailto:{EMAIL}">{IC['mail']} {EMAIL}</a>
         </div>
       </div>
@@ -855,7 +858,7 @@ def page_home():
           <p class="lead" style="margin-top:1rem;max-width:44ch">Tell us about your project — supply, fabrication, installation or maintenance. Our team will get back to you.</p>
           <div class="contact-details">
             <div class="contact-item"><span class="ci-ico">{IC['pin']}</span><div><h3>UAE Office</h3><address>Trivex Industrial Solutions FZC<br>Warehouse Q4-169, SAIF Zone<br>Sharjah, United Arab Emirates</address></div></div>
-            <div class="contact-item"><span class="ci-ico">{IC['phone']}</span><div><h3>Telephone</h3><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></div></div>
+            <div class="contact-item"><span class="ci-ico">{IC['phone']}</span><div><h3>Telephone</h3><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a><br><a href="tel:{PHONE2_TEL}">{PHONE2_DISPLAY}</a></div></div>
             <div class="contact-item"><span class="ci-ico">{IC['mail']}</span><div><h3>Email</h3><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
             <div class="contact-item"><span class="ci-ico">{IC['whatsapp']}</span><div><h3>WhatsApp</h3><a href="{wa_link('Hello, I would like to know more about your products and services.')}" target="_blank" rel="noopener">Chat with our team</a></div></div>
           </div>
@@ -1000,6 +1003,7 @@ def page_product(p):
       <a class="btn btn--ghost-dark" href="/products/">{IC['chevron']} All products</a>
       <div class="enquiry-card__contact">
         <a href="tel:{PHONE_TEL}">{IC['phone']} {PHONE_DISPLAY}</a>
+        <a href="tel:{PHONE2_TEL}">{IC['phone']} {PHONE2_DISPLAY}</a>
         <a href="mailto:{EMAIL}">{IC['mail']} Email us</a>
       </div>
     </aside>'''
@@ -1113,6 +1117,7 @@ def page_service(s):
         <a class="btn btn--wa btn--lg" href="{wa_link(wa_msg)}" target="_blank" rel="noopener">{IC['whatsapp']} WhatsApp us</a>
         <div class="enquiry-card__contact">
           <a href="tel:{PHONE_TEL}">{IC['phone']} {PHONE_DISPLAY}</a>
+          <a href="tel:{PHONE2_TEL}">{IC['phone']} {PHONE2_DISPLAY}</a>
           <a href="mailto:{EMAIL}">{IC['mail']} Email us</a>
         </div>
       </aside>
@@ -1216,7 +1221,7 @@ def page_contact():
       <div class="reveal">
         <div class="contact-details">
           <div class="contact-item"><span class="ci-ico">{IC['pin']}</span><div><h3>UAE Office</h3><address>Trivex Industrial Solutions FZC<br>Warehouse Q4-169, SAIF Zone<br>Sharjah, United Arab Emirates</address></div></div>
-          <div class="contact-item"><span class="ci-ico">{IC['phone']}</span><div><h3>Telephone</h3><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></div></div>
+          <div class="contact-item"><span class="ci-ico">{IC['phone']}</span><div><h3>Telephone</h3><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a><br><a href="tel:{PHONE2_TEL}">{PHONE2_DISPLAY}</a></div></div>
           <div class="contact-item"><span class="ci-ico">{IC['mail']}</span><div><h3>Email</h3><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
           <div class="contact-item"><span class="ci-ico">{IC['whatsapp']}</span><div><h3>WhatsApp</h3><a href="{wa_link('Hello, I would like to know more about your products and services.')}" target="_blank" rel="noopener">Chat with our team</a></div></div>
         </div>
@@ -1247,7 +1252,7 @@ def page_contact():
   </section>
 '''
     h = head("Contact | Trivex Industrial Solutions — Sharjah, UAE",
-             "Contact Trivex Industrial Solutions FZC — SAIF Zone, Sharjah, UAE. Request a quote for industrial products, fabrication, installation or maintenance. Call +971 50 102 6160.",
+             "Contact Trivex Industrial Solutions FZC — SAIF Zone, Sharjah, UAE. Request a quote for industrial products, fabrication, installation or maintenance. Call +971 6 534 6311.",
              "/contact/", ld=bc_ld)
     write("/contact/", shell(h, body, "contact", wa_msg="Hello, I would like to get in touch with Trivex."))
     PAGES.append(("/contact/","0.8"))
