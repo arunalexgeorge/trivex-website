@@ -698,6 +698,10 @@ def shell(head_html, body, active, home=False, wa_msg="Hello, I would like to kn
 #  PAGE BUILDERS
 # =====================================================================
 def write(path, content):
+    if BASE:  # prefix internal root-relative paths for sub-path hosting (e.g. GitHub Pages)
+        content = (content.replace('href="/', f'href="{BASE}/')
+                          .replace('src="/', f'src="{BASE}/')
+                          .replace('data-img="/', f'data-img="{BASE}/'))
     full = os.path.join(ROOT, path.strip("/"), "index.html") if path != "/" else os.path.join(ROOT, "index.html")
     os.makedirs(os.path.dirname(full), exist_ok=True)
     open(full, "w").write(content)
