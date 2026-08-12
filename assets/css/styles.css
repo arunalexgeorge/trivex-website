@@ -27,8 +27,8 @@
 
   /* Typography */
   --font: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  /* Display/heading face — Archivo at expanded width (font-stretch:125%) for heavy-duty industrial headlines */
-  --font-display: "Archivo", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Display/heading face — Space Grotesk: technical, engineering-forward grotesque for headlines */
+  --font-display: "Space Grotesk", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   /* Fluid type scale */
   --fs-display: clamp(2.6rem, 1.3rem + 5.6vw, 5.25rem);
@@ -87,7 +87,7 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
 input, textarea, select { font: inherit; color: inherit; }
 ul { list-style: none; padding: 0; }
-h1,h2,h3,h4 { font-family: var(--font-display); font-stretch: 125%; line-height: 1.08; font-weight: 700; letter-spacing: -0.015em; }
+h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.08; font-weight: 700; letter-spacing: -0.015em; }
 :focus-visible { outline: 3px solid var(--green); outline-offset: 3px; border-radius: 3px; }
 ::selection { background: var(--green); color: #fff; }
 
