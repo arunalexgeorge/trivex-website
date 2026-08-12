@@ -468,7 +468,7 @@ def head(title, desc, path, og_image="/assets/img/brand/og-cover.jpg", ld=None, 
 <link rel="apple-touch-icon" href="/assets/img/brand/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,100..900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 {preload}
 <link rel="stylesheet" href="/assets/css/styles.css?v={CSS_VER}">
 {ld_tags}
