@@ -3,10 +3,22 @@
 Dependency-free. Emits clean directory-index URLs (e.g. /products/<slug>/).
 Run: python3 tools/build_html.py   (writes into the project root)
 Data-driven: products/services/industries/projects live in the tables below."""
-import os, html, json, shutil
+import os, html, json, shutil, hashlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+def asset_ver(rel):
+    """Short content hash for cache-busting a static asset (?v=...).
+    Ensures browsers/CDNs fetch a fresh copy whenever the file changes."""
+    try:
+        with open(os.path.join(ROOT, rel), "rb") as f:
+            return hashlib.md5(f.read()).hexdigest()[:8]
+    except OSError:
+        return "0"
+
+CSS_VER = asset_ver("assets/css/styles.css")
+JS_VER  = asset_ver("assets/js/main.js")
 
 # ---------- Config ----------
 # BASE_PATH: URL sub-path prefix for hosting under a folder (e.g. GitHub Pages project site "/repo").
@@ -458,7 +470,7 @@ def head(title, desc, path, og_image="/assets/img/brand/og-cover.jpg", ld=None, 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 {preload}
-<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="/assets/css/styles.css?v={CSS_VER}">
 {ld_tags}
 </head>'''
 
@@ -705,7 +717,7 @@ def shell(head_html, body, active, home=False, wa_msg="Hello, I would like to kn
   <button class="lightbox__close" id="lightboxClose" aria-label="Close">&times;</button>
   <figure><img id="lightboxImg" src="" alt=""><figcaption><h3 id="lightboxTitle"></h3><p id="lightboxSpec"></p></figcaption></figure>
 </div>
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/main.js?v={JS_VER}" defer></script>
 </body>
 </html>'''
 
