@@ -18,10 +18,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build site (with Pages base path)
+      - name: Build site (root-hosted on custom domain)
         env:
-          BASE_PATH: /trivex-website
-          SITE_URL: https://arunalexgeorge.github.io/trivex-website
+          BASE_PATH: ""                                  # root-relative links (custom domain serves at /)
+          SITE_URL: https://trivexindustrialsolutions.com
         run: python3 tools/build_html.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
