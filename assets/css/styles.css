@@ -302,10 +302,16 @@ body.menu-open { overflow: hidden; }
 .clients { margin-top: clamp(2.5rem, 5vw, 4rem); }
 .clients__label { font-size: var(--fs-sm); font-weight: 700; color: var(--ink); margin-bottom: 1.1rem; display: flex; align-items: center; gap: .6rem; }
 .clients__label::after { content: ""; height: 1px; flex: 1; background: var(--line); }
-.logo-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden; }
-.logo-row .cell { background: #fff; display: grid; place-items: center; padding: 1.4rem 1rem; }
-.logo-row img { height: 34px; width: auto; object-fit: contain; filter: grayscale(1); opacity: .62; transition: filter .3s var(--ease), opacity .3s var(--ease), transform .3s var(--ease); background: transparent; }
-.logo-row .cell:hover img { filter: none; opacity: 1; transform: scale(1.04); }
+.logo-marquee { position: relative; background: #fff; border: 1px solid var(--line-soft); border-radius: var(--radius); overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.logo-track { display: flex; width: max-content; animation: logo-scroll 42s linear infinite; }
+.logo-marquee:hover .logo-track { animation-play-state: paused; }
+.logo-track .cell { flex: 0 0 auto; display: grid; place-items: center; padding: 1.4rem 2.4rem; }
+.logo-track img { height: 34px; width: auto; object-fit: contain; background: transparent; transition: transform .3s var(--ease); }
+.logo-track .cell:hover img { transform: scale(1.14); }
+@keyframes logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
 .partner-row { margin-top: 1.5rem; display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
 .partner-row .clients__label { margin: 0; }
 .partner-row img { height: 30px; background: transparent; }
@@ -514,7 +520,6 @@ body.menu-open { overflow: hidden; }
   .about__intro { grid-template-columns: 1fr; align-items: start; }
   .bento { grid-template-columns: repeat(2, 1fr); }
   .tile--feature { grid-row: span 1; grid-column: span 2; min-height: 150px; flex-direction: row; align-items: center; }
-  .logo-row { grid-template-columns: repeat(3, 1fr); }
   .products__head { grid-template-columns: 1fr; }
   .products__tag { min-height: 120px; }
   .contact__grid { grid-template-columns: 1fr; }
@@ -537,7 +542,6 @@ body.menu-open { overflow: hidden; }
   .hero { min-height: 92svh; }
   .bento { grid-template-columns: 1fr; }
   .tile--feature { grid-column: 1; }
-  .logo-row { grid-template-columns: repeat(2, 1fr); }
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .product-card__media { aspect-ratio: 1/1; }

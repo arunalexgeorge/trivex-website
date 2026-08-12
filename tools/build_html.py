@@ -637,13 +637,20 @@ def faq_accordion(faqs):
         {"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in faqs]}
     return f'<div class="acc">{items}</div>', ld
 
+def client_marquee():
+    """Seamless infinite-scroll strip of client logos (content duplicated once
+    so translateX(-50%) loops without a visible seam)."""
+    def cells(hidden=False):
+        h = ' aria-hidden="true"' if hidden else ''
+        return "".join(
+            f'<div class="cell"{h}><img src="/assets/img/clients/{s}.jpg" alt="{esc(n)}" loading="lazy" decoding="async" width="{round(CLIENT_W[s]*34/120)}" height="34"></div>'
+            for s,n in CLIENTS)
+    return f'<div class="logo-marquee"><div class="logo-track">{cells()}{cells(hidden=True)}</div></div>'
+
 def clients_strip(label="Trusted across the region"):
-    cells = "".join(
-        f'<div class="cell"><img src="/assets/img/clients/{s}.jpg" alt="{esc(n)}" loading="lazy" decoding="async" width="{round(CLIENT_W[s]*34/120)}" height="34"></div>'
-        for s,n in CLIENTS)
     return f'''<div class="clients reveal">
     <p class="clients__label">{label}</p>
-    <div class="logo-row">{cells}</div>
+    {client_marquee()}
   </div>'''
 
 def footer():
@@ -728,7 +735,6 @@ def page_home():
     dots = "".join(f'<button role="tab" aria-label="Slide {i+1}"{" aria-selected=\"true\"" if i==0 else ""}></button>' for i in range(len(hero_slides)))
     stats = "".join(f'<div class="stat reveal" data-delay="{i}"><b data-count="{v}" data-suffix="{suf}">{v}{suf}</b><span>{l}</span></div>'
                     for i,(v,suf,l) in enumerate([("36","+","Engineered product lines"),("8","","Specialist services"),("6","","Industries served"),("360","°","Design · build · maintain")]))
-    client_cells = "".join(f'<div class="cell"><img src="/assets/img/clients/{s}.jpg" alt="{esc(n)}" loading="lazy" decoding="async" width="{round(CLIENT_W[s]*34/120)}" height="34"></div>' for s,n in CLIENTS)
     bento_html = "".join(bento_tile(*b) for b in BENTO)
     filters = "".join(
         f'<button role="tab" data-filter="{k}"{" class=\"is-active\" aria-selected=\"true\"" if k=="all" else " aria-selected=\"false\""}>{lbl}</button>'
@@ -773,7 +779,7 @@ def page_home():
       </div>
       <div class="clients reveal">
         <p class="clients__label">Our clients</p>
-        <div class="logo-row">{client_cells}</div>
+        {client_marquee()}
         <div class="partner-row"><p class="clients__label" style="margin:0">Our channel partner</p><img src="/assets/img/clients/aquax.jpg" alt="Aqua X" loading="lazy" decoding="async" width="138" height="30"></div>
       </div>
       <div class="bento">{bento_html}</div>
