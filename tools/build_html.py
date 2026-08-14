@@ -24,7 +24,7 @@ JS_VER  = asset_ver("assets/js/main.js")
 # BASE_PATH: URL sub-path prefix for hosting under a folder (e.g. GitHub Pages project site "/repo").
 # SITE_URL:  absolute site origin (used for canonical / OG / sitemap). Both overridable via env.
 BASE   = os.environ.get("BASE_PATH", "").rstrip("/")
-SITE   = os.environ.get("SITE_URL", "https://www.trivexindustrialsolutions.com").rstrip("/")
+SITE   = os.environ.get("SITE_URL", "https://trivexindustrialsolutions.com").rstrip("/")
 YEAR   = 2025
 PHONE_DISPLAY = "+971 6 534 6311"
 PHONE_TEL     = "+97165346311"
@@ -452,7 +452,7 @@ def head(title, desc, path, og_image="/assets/img/brand/og-cover.jpg", ld=None, 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>if(location.protocol==="http:")location.replace("https:"+location.href.slice(5));</script>
+<script>(function(l){{var h=l.hostname;if(h==="localhost"||h==="127.0.0.1")return;if(l.protocol==="http:"||h.slice(0,4)==="www.")l.replace("https://"+h.replace(/^www\\./,"")+l.pathname+l.search+l.hash)}})(location);</script>
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="#37a109">
