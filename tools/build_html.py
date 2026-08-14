@@ -452,6 +452,7 @@ def head(title, desc, path, og_image="/assets/img/brand/og-cover.jpg", ld=None, 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>if(location.protocol==="http:")location.replace("https:"+location.href.slice(5));</script>
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="#37a109">
