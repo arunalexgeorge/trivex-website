@@ -793,7 +793,7 @@ def page_home():
       <div class="clients reveal">
         <p class="clients__label">Our clients</p>
         {client_marquee()}
-        <div class="partner-row"><p class="clients__label" style="margin:0">Our channel partner</p><img src="/assets/img/clients/aquax.jpg" alt="Aqua X" loading="lazy" decoding="async" width="138" height="30"></div>
+        <div class="partner-row"><p class="clients__label" style="margin:0">Our channel partner</p><a href="https://aquaxuae.com/" target="_blank" rel="noopener" aria-label="Aqua X"><img src="/assets/img/clients/aquax.jpg" alt="Aqua X" loading="lazy" decoding="async" width="138" height="30"></a></div>
       </div>
       <div class="bento">{bento_html}</div>
     </div>
@@ -873,7 +873,7 @@ def page_home():
 
   <!-- CONTACT -->
   <section class="section contact" id="contact">
-    <img class="contact__pin" src="/assets/img/scene/pin.jpg" alt="" aria-hidden="true" loading="lazy">
+    <img class="contact__pin" src="/assets/img/scene/pin.png" alt="" aria-hidden="true" loading="lazy">
     <div class="container container--wide">
       <div class="contact__grid">
         <div class="reveal">
@@ -1250,8 +1250,8 @@ def page_contact():
           <div class="contact-item"><span class="ci-ico">{IC['whatsapp']}</span><div><h3>WhatsApp</h3><a href="{wa_link('Hello, I would like to know more about your products and services.')}" target="_blank" rel="noopener">Chat with our team</a></div></div>
         </div>
         <div class="contact-map reveal">
-          <iframe title="Trivex location — SAIF Zone, Sharjah" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=SAIF%20Zone%20Sharjah%20UAE&output=embed"></iframe>
+          <iframe title="Trivex Industrial Solutions (FZC) — SAIF Zone, Sharjah" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Trivex+Industrial+Solutions+%28FZC%29,+SAIF+Zone,+Sharjah&output=embed"></iframe>
         </div>
       </div>
       <form class="contact-form reveal" data-delay="1" id="contactForm" novalidate>
