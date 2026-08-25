@@ -32,7 +32,7 @@ PHONE2_DISPLAY = "+971 50 584 0555"        # second number (no WhatsApp)
 PHONE2_TEL     = "+971505840555"
 EMAIL  = "sales@trivexindustrialsolutions.com"
 WHATSAPP_NUMBER = "97165346311"            # international format, no +/spaces
-ADDRESS = "Warehouse Q4-169, SAIF Zone, Sharjah, United Arab Emirates"
+ADDRESS = "Warehouse Q3-65, SAIF Zone, Sharjah, United Arab Emirates"
 
 # Vectorised wordmark logo (traced from client_data/logo_green.jpeg)
 _logo_vb, _logo_inner = open(os.path.join(HERE, "data/logo_symbol.txt")).read().split("\n", 1)
@@ -442,7 +442,7 @@ def head(title, desc, path, og_image="/assets/img/brand/og-cover.jpg", ld=None, 
     jsonlds = [{"@context":"https://schema.org","@type":"Organization","name":"Trivex Industrial Solutions FZC",
         "alternateName":"Trivex","url":SITE+"/","logo":SITE+"/assets/img/brand/favicon-512.png",
         "email":EMAIL,"telephone":PHONE_TEL,"foundingDate":"2025","slogan":"Complete Industrial Solutions",
-        "address":{"@type":"PostalAddress","streetAddress":"Warehouse Q4-169, SAIF Zone","addressLocality":"Sharjah","addressCountry":"AE"},
+        "address":{"@type":"PostalAddress","streetAddress":"Warehouse Q3-65, SAIF Zone","addressLocality":"Sharjah","addressCountry":"AE"},
         "areaServed":"AE"}]
     if ld: jsonlds.append(ld)
     ld_tags = "".join(f'<script type="application/ld+json">{json.dumps(l)}</script>' for l in jsonlds)
@@ -881,7 +881,7 @@ def page_home():
           <h2 class="contact__title" style="margin-top:.6rem">Contact us</h2>
           <p class="lead" style="margin-top:1rem;max-width:44ch">Tell us about your project — supply, fabrication, installation or maintenance. Our team will get back to you.</p>
           <div class="contact-details">
-            <div class="contact-item"><span class="ci-ico">{IC['pin']}</span><div><h3>UAE Office</h3><address>Trivex Industrial Solutions FZC<br>Warehouse Q4-169, SAIF Zone<br>Sharjah, United Arab Emirates</address></div></div>
+            <div class="contact-item"><span class="ci-ico">{IC['pin']}</span><div><h3>UAE Office</h3><address>Trivex Industrial Solutions FZC<br>Warehouse Q3-65, SAIF Zone<br>Sharjah, United Arab Emirates</address></div></div>
             <div class="contact-item"><span class="ci-ico">{IC['phone']}</span><div><h3>Telephone</h3><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a><br><a href="tel:{PHONE2_TEL}">{PHONE2_DISPLAY}</a></div></div>
             <div class="contact-item"><span class="ci-ico">{IC['mail']}</span><div><h3>Email</h3><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
             <div class="contact-item"><span class="ci-ico">{IC['whatsapp']}</span><div><h3>WhatsApp</h3><a href="{wa_link('Hello, I would like to know more about your products and services.')}" target="_blank" rel="noopener">Chat with our team</a></div></div>
@@ -1244,7 +1244,7 @@ def page_contact():
     <div class="container container--wide contact__grid">
       <div class="reveal">
         <div class="contact-details">
-          <div class="contact-item"><span class="ci-ico">{IC['pin']}</span><div><h3>UAE Office</h3><address>Trivex Industrial Solutions FZC<br>Warehouse Q4-169, SAIF Zone<br>Sharjah, United Arab Emirates</address></div></div>
+          <div class="contact-item"><span class="ci-ico">{IC['pin']}</span><div><h3>UAE Office</h3><address>Trivex Industrial Solutions FZC<br>Warehouse Q3-65, SAIF Zone<br>Sharjah, United Arab Emirates</address></div></div>
           <div class="contact-item"><span class="ci-ico">{IC['phone']}</span><div><h3>Telephone</h3><a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a><br><a href="tel:{PHONE2_TEL}">{PHONE2_DISPLAY}</a></div></div>
           <div class="contact-item"><span class="ci-ico">{IC['mail']}</span><div><h3>Email</h3><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
           <div class="contact-item"><span class="ci-ico">{IC['whatsapp']}</span><div><h3>WhatsApp</h3><a href="{wa_link('Hello, I would like to know more about your products and services.')}" target="_blank" rel="noopener">Chat with our team</a></div></div>
