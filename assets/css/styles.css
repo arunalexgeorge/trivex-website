@@ -476,6 +476,9 @@ body.menu-open { overflow: hidden; }
 .form-status { margin-top: .8rem; font-size: var(--fs-sm); font-weight: 600; min-height: 1.2em; }
 .form-status.ok { color: var(--green-strong); }
 .form-status.err { color: #c0392b; }
+/* Honeypot: off-screen rather than display:none so bots that skip hidden fields still fill it. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.contact-form button[type="submit"][disabled] { opacity: .6; cursor: progress; }
 
 /* ---------- 15. Footer ---------- */
 .site-footer { background: var(--ink); color: rgba(255,255,255,.72); padding-block: clamp(3rem,6vw,5rem) 2rem; }

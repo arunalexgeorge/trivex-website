@@ -22,6 +22,11 @@ jobs:
         env:
           BASE_PATH: ""                                  # root-relative links (custom domain serves at /)
           SITE_URL: https://trivexindustrialsolutions.com
+          # EmailJS quote-form delivery. Public IDs (they ship in the page source), so plain
+          # `vars`, not secrets. Unset -> the form falls back to a mailto: handoff.
+          EMAILJS_PUBLIC_KEY: ${{ vars.EMAILJS_PUBLIC_KEY }}
+          EMAILJS_SERVICE_ID: ${{ vars.EMAILJS_SERVICE_ID }}
+          EMAILJS_TEMPLATE_ID: ${{ vars.EMAILJS_TEMPLATE_ID }}
         run: python3 tools/build_html.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

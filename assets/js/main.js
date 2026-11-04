@@ -174,10 +174,16 @@
     start();
   })();
 
-  /* ---------- Contact form: prefill + mailto handoff ---------- */
+  /* ---------- Contact form: prefill + EmailJS send (mailto fallback) ---------- */
   (function () {
     var form = $("#contactForm"); if (!form) return;
     var status = $("#formStatus");
+    var button = $("button[type=submit]", form);
+    var cfg = form.dataset;
+    // The generator only emits these three when EmailJS is configured; without them we
+    // keep the original behaviour of handing off to the visitor's mail client.
+    var useEmailJS = !!(cfg.ejsKey && cfg.ejsService && cfg.ejsTemplate);
+
     // prefill from ?product= / ?service= / ?industry=
     try {
       var q = new URLSearchParams(location.search);
@@ -188,17 +194,71 @@
       else if (q.get("industry")) pre = "I would like to discuss a solution for " + readable(q.get("industry")) + ".";
       if (pre && form.message && !form.message.value) form.message.value = pre;
     } catch (e) {}
+
+    function say(text, cls) { status.textContent = text; status.className = cls ? "form-status " + cls : "form-status"; }
+
+    // SDK is ~5 KB and only needed on the two pages with a form, so fetch it lazily:
+    // warmed on first focus, awaited on submit. Cached across calls.
+    var sdk = null;
+    function loadSDK() {
+      if (!sdk) {
+        sdk = new Promise(function (resolve, reject) {
+          var s = document.createElement("script");
+          s.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+          s.onload = function () { window.emailjs.init({ publicKey: cfg.ejsKey }); resolve(window.emailjs); };
+          s.onerror = function () { sdk = null; reject(new Error("EmailJS SDK unavailable")); };
+          document.head.appendChild(s);
+        });
+      }
+      return sdk;
+    }
+    if (useEmailJS) form.addEventListener("focusin", loadSDK, { once: true });
+
+    function mailto(subject, body) {
+      window.location.href = "mailto:sales@trivexindustrialsolutions.com?subject=" +
+        encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var name = form.name.value.trim(), email = form.email.value.trim(), msg = form.message.value.trim();
       var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if (!name || !emailOk || !msg) { status.textContent = "Please add your name, a valid email and a message."; status.className = "form-status err"; return; }
+      if (!name || !emailOk || !msg) { say("Please add your name, a valid email and a message.", "err"); return; }
+      // Honeypot: hidden from people, irresistible to bots. Feign success, send nothing.
+      if (form.website && form.website.value) { say("Thank you — your enquiry is on its way.", "ok"); form.reset(); return; }
+
+      var subject = "Enquiry from " + name + " — Trivex website";
       var body = "Name: " + name + "\nCompany: " + form.company.value.trim() + "\nEmail: " + email +
         "\nPhone: " + form.phone.value.trim() + "\nArea of interest: " + form.interest.value + "\n\n" + msg;
-      window.location.href = "mailto:sales@trivexindustrialsolutions.com?subject=" +
-        encodeURIComponent("Enquiry from " + name + " — Trivex website") + "&body=" + encodeURIComponent(body);
-      status.textContent = "Opening your email app… if nothing happens, email sales@trivexindustrialsolutions.com directly.";
-      status.className = "form-status ok"; form.reset();
+
+      if (!useEmailJS) {
+        mailto(subject, body);
+        say("Opening your email app… if nothing happens, email sales@trivexindustrialsolutions.com directly.", "ok");
+        form.reset();
+        return;
+      }
+
+      // Sent as an explicit param object rather than sendForm(): EmailJS templates have no
+      // conditional syntax, so blank optional fields would leave empty rows in the email.
+      var params = {
+        name: name, email: email, message: msg, subject: subject, reply_to: email,
+        company: form.company.value.trim() || "—",
+        phone: form.phone.value.trim() || "—",
+        interest: form.interest.value || "Not specified"
+      };
+      button.disabled = true;
+      say("Sending…", "");
+      loadSDK().then(function (emailjs) {
+        return emailjs.send(cfg.ejsService, cfg.ejsTemplate, params);
+      }).then(function () {
+        say("Thank you — your enquiry has been sent. Our team will get back to you shortly.", "ok");
+        form.reset();
+      }).catch(function () {
+        say("Sorry, that didn't send — opening your email app instead. You can also write to sales@trivexindustrialsolutions.com.", "err");
+        mailto(subject, body);
+      }).then(function () {
+        button.disabled = false;
+      });
     });
   })();
 })();

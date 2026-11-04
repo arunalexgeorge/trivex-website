@@ -3,7 +3,7 @@
 Dependency-free. Emits clean directory-index URLs (e.g. /products/<slug>/).
 Run: python3 tools/build_html.py   (writes into the project root)
 Data-driven: products/services/industries/projects live in the tables below."""
-import os, html, json, shutil, hashlib
+import os, html, json, shutil, hashlib, textwrap
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +33,14 @@ PHONE2_TEL     = "+971505840555"
 EMAIL  = "sales@trivexindustrialsolutions.com"
 WHATSAPP_NUMBER = "97165346311"            # international format, no +/spaces
 ADDRESS = "Warehouse Q3-65, SAIF Zone, Sharjah, United Arab Emirates"
+
+# EmailJS — client-side delivery for the quote form (no backend needed).
+# All three IDs are public by design: they ship inside the page source, and abuse is
+# contained in the EmailJS dashboard via the allow-listed domain + monthly quota, not by
+# keeping them secret. Leave any of them blank and the form falls back to the mailto: handoff.
+EMAILJS_PUBLIC_KEY  = os.environ.get("EMAILJS_PUBLIC_KEY",  "")
+EMAILJS_SERVICE_ID  = os.environ.get("EMAILJS_SERVICE_ID",  "")
+EMAILJS_TEMPLATE_ID = os.environ.get("EMAILJS_TEMPLATE_ID", "")
 
 # Vectorised wordmark logo (traced from client_data/logo_green.jpeg)
 _logo_vb, _logo_inner = open(os.path.join(HERE, "data/logo_symbol.txt")).read().split("\n", 1)
@@ -82,6 +90,41 @@ IC = {
  "quote": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 7H4a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2H4v2h1a4 4 0 0 0 4-4V9a2 2 0 0 0-2-2zm11 0h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2h0v2h1a4 4 0 0 0 4-4V9a2 2 0 0 0-2-2z"/></svg>',
  "linkedin": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM0 8h5v16H0zM8 8h4.8v2.2h.07c.67-1.2 2.3-2.5 4.73-2.5 5.06 0 6 3.3 6 7.6V24h-5v-7.2c0-1.7 0-3.9-2.4-3.9s-2.7 1.9-2.7 3.8V24H8z"/></svg>',
 }
+
+# ---------- Quote form (shared by the home CTA and /contact/) ----------
+def contact_form(pad=""):
+    """Markup for the "Request a quote" form.
+
+    Delivery is client-side: assets/js/main.js posts it through EmailJS when the three
+    EMAILJS_* IDs are set, and otherwise falls back to composing a mailto:. The `website`
+    field is a honeypot -- hidden from people, read by that handler to drop bot submissions.
+    `pad` is the indent of the surrounding markup (cosmetic only)."""
+    prod_opts = "".join(f'<option value="{c[1]}">{c[1]}</option>' for c in PRODUCT_CATEGORIES)
+    ejs = ""
+    if EMAILJS_PUBLIC_KEY and EMAILJS_SERVICE_ID and EMAILJS_TEMPLATE_ID:
+        ejs = (f' data-ejs-key="{esc(EMAILJS_PUBLIC_KEY)}"'
+               f' data-ejs-service="{esc(EMAILJS_SERVICE_ID)}"'
+               f' data-ejs-template="{esc(EMAILJS_TEMPLATE_ID)}"')
+    form = f'''<form class="contact-form reveal" data-delay="1" id="contactForm" novalidate{ejs}>
+  <h2>Request a quote</h2>
+  <p class="form-note">Fields marked <span style="color:var(--green-strong)">*</span> are required.</p>
+  <div class="form-row">
+    <div class="field"><label for="cf-name">Name <span class="req">*</span></label><input id="cf-name" name="name" type="text" autocomplete="name" required></div>
+    <div class="field"><label for="cf-company">Company</label><input id="cf-company" name="company" type="text" autocomplete="organization"></div>
+  </div>
+  <div class="form-row">
+    <div class="field"><label for="cf-email">Email <span class="req">*</span></label><input id="cf-email" name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="cf-phone">Phone</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel"></div>
+  </div>
+  <div class="field"><label for="cf-interest">Area of interest</label>
+    <select id="cf-interest" name="interest"><option value="">Select…</option>{prod_opts}<option>Services / Installation</option><option>Maintenance &amp; support</option></select>
+  </div>
+  <div class="field"><label for="cf-msg">Message <span class="req">*</span></label><textarea id="cf-msg" name="message" required placeholder="Tell us about your requirement…"></textarea></div>
+  <div class="hp" aria-hidden="true"><label for="cf-website">Leave this field empty</label><input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+  <button class="btn btn--solid btn--lg" type="submit" style="width:100%">Send enquiry {IC['arrow']}</button>
+  <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+</form>'''
+    return textwrap.indent(form, pad)[len(pad):]
 
 # =====================================================================
 #  DATA
@@ -761,7 +804,6 @@ def page_home():
         for t,d in [("Engineered in-house","Fabrication, assembly and testing under one roof for consistent, traceable quality."),
                     ("Complete lifecycle","From concept and supply through to installation, commissioning and upkeep."),
                     ("Built for regional industry","Serving utilities, free-zone developers and process plants across the UAE and GCC.")])
-    prod_opts = "".join(f'<option value="{c[1]}">{c[1]}</option>' for c in PRODUCT_CATEGORIES)
     body = f'''
   <section class="hero" id="home">
     <div class="hero__media" id="heroSlides" aria-label="Facility image slideshow" role="group">{slides}</div>
@@ -887,24 +929,7 @@ def page_home():
             <div class="contact-item"><span class="ci-ico">{IC['whatsapp']}</span><div><h3>WhatsApp</h3><a href="{wa_link('Hello, I would like to know more about your products and services.')}" target="_blank" rel="noopener">Chat with our team</a></div></div>
           </div>
         </div>
-        <form class="contact-form reveal" data-delay="1" id="contactForm" novalidate>
-          <h2>Request a quote</h2>
-          <p class="form-note">Fields marked <span style="color:var(--green-strong)">*</span> are required.</p>
-          <div class="form-row">
-            <div class="field"><label for="cf-name">Name <span class="req">*</span></label><input id="cf-name" name="name" type="text" autocomplete="name" required></div>
-            <div class="field"><label for="cf-company">Company</label><input id="cf-company" name="company" type="text" autocomplete="organization"></div>
-          </div>
-          <div class="form-row">
-            <div class="field"><label for="cf-email">Email <span class="req">*</span></label><input id="cf-email" name="email" type="email" autocomplete="email" required></div>
-            <div class="field"><label for="cf-phone">Phone</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel"></div>
-          </div>
-          <div class="field"><label for="cf-interest">Area of interest</label>
-            <select id="cf-interest" name="interest"><option value="">Select…</option>{prod_opts}<option>Services / Installation</option><option>Maintenance &amp; support</option></select>
-          </div>
-          <div class="field"><label for="cf-msg">Message <span class="req">*</span></label><textarea id="cf-msg" name="message" required placeholder="Tell us about your requirement…"></textarea></div>
-          <button class="btn btn--solid btn--lg" type="submit" style="width:100%">Send enquiry {IC['arrow']}</button>
-          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-        </form>
+        {contact_form("        ")}
       </div>
     </div>
   </section>
@@ -1235,7 +1260,6 @@ def page_projects():
 
 def page_contact():
     bc, bc_ld = breadcrumbs([("Home","/"),("Contact",None)])
-    prod_opts = "".join(f'<option value="{c[1]}">{c[1]}</option>' for c in PRODUCT_CATEGORIES)
     body = f'''
   {page_hero("Get in touch","Let's talk about your project",
     "Tell us what you need — supply, fabrication, installation or maintenance — and our team will respond within one business day.", img="bg/products-4.jpg")}
@@ -1254,24 +1278,7 @@ def page_contact():
             src="https://www.google.com/maps?q=Trivex+Industrial+Solutions+%28FZC%29,+SAIF+Zone,+Sharjah&output=embed"></iframe>
         </div>
       </div>
-      <form class="contact-form reveal" data-delay="1" id="contactForm" novalidate>
-        <h2>Request a quote</h2>
-        <p class="form-note">Fields marked <span style="color:var(--green-strong)">*</span> are required.</p>
-        <div class="form-row">
-          <div class="field"><label for="cf-name">Name <span class="req">*</span></label><input id="cf-name" name="name" type="text" autocomplete="name" required></div>
-          <div class="field"><label for="cf-company">Company</label><input id="cf-company" name="company" type="text" autocomplete="organization"></div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label for="cf-email">Email <span class="req">*</span></label><input id="cf-email" name="email" type="email" autocomplete="email" required></div>
-          <div class="field"><label for="cf-phone">Phone</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel"></div>
-        </div>
-        <div class="field"><label for="cf-interest">Area of interest</label>
-          <select id="cf-interest" name="interest"><option value="">Select…</option>{prod_opts}<option>Services / Installation</option><option>Maintenance &amp; support</option></select>
-        </div>
-        <div class="field"><label for="cf-msg">Message <span class="req">*</span></label><textarea id="cf-msg" name="message" required placeholder="Tell us about your requirement…"></textarea></div>
-        <button class="btn btn--solid btn--lg" type="submit" style="width:100%">Send enquiry {IC['arrow']}</button>
-        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-      </form>
+      {contact_form("      ")}
     </div>
   </section>
 '''

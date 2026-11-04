@@ -29,6 +29,7 @@ robots.txt  sitemap.xml           (sitemap auto-generated with all 51 URLs)
 ```
 tools/build_html.py     ← multi-page generator. Data tables: PRODUCTS, SERVICES, INDUSTRIES, PROJECTS.
 tools/data/             ← inline SVG logo data used by the generator.
+tools/emailjs-template.html ← master copy of the EmailJS notification email (paste into the dashboard).
 assets/css/styles.css   ← design system + all components (nav/mega-menu, product detail, tabs, accordion,
                           timeline, cards, WhatsApp float, view transitions, responsive).
 assets/js/main.js       ← nav dropdowns, mobile drawer + submenus, tabs, FAQ accordion, count-up stats,
@@ -51,9 +52,31 @@ Content (product/service/industry copy, benefits, FAQs) lives in the data tables
 - **WhatsApp:** `WHATSAPP_NUMBER` constant in `tools/build_html.py` (international format, no `+`).
   A floating WhatsApp button appears on every page; product/service pages pass a **contextual**
   pre-filled message (e.g. *"Hello, I am interested in <Product>…"*).
-- **Contact:** `PHONE_TEL`, `EMAIL`, `SITE` constants. The quote form has no backend — it composes a
-  `mailto:` and pre-fills from `?product=` / `?service=` / `?industry=` query params. Wire it to a
-  form endpoint (Formspree, Netlify Forms, etc.) for server-side handling.
+- **Contact:** `PHONE_TEL`, `EMAIL`, `SITE` constants. The quote form pre-fills from
+  `?product=` / `?service=` / `?industry=` query params.
+- **Quote form delivery (EmailJS):** set the three constants at the top of `tools/build_html.py`
+  (or the matching env vars, as the deploy workflow does) and rebuild:
+
+  | Constant | Where to find it in the EmailJS dashboard |
+  |---|---|
+  | `EMAILJS_SERVICE_ID`  | Email Services → your service |
+  | `EMAILJS_TEMPLATE_ID` | Email Templates → your template |
+  | `EMAILJS_PUBLIC_KEY`  | Account → General → Public Key |
+
+  These three IDs are **public by design** — they ship in the page source, so they are safe to
+  commit. Lock the account down in the dashboard instead: add `trivexindustrialsolutions.com`
+  under **Account → Security → Allow-list**, and keep the monthly quota capped.
+
+  **Template:** `tools/emailjs-template.html` is the version-controlled master — paste its markup
+  into the dashboard's *Content → Code Editor*, and set Subject to `{{subject}}`, Reply To to
+  `{{reply_to}}`, To Email to `sales@…`. It uses `{{name}}`, `{{company}}`, `{{email}}`,
+  `{{phone}}`, `{{interest}}`, `{{message}}`. EmailJS has **no conditional syntax**, so the submit
+  handler substitutes `—` / `Not specified` for blank optional fields before sending; don't add
+  `{{#if}}` to the template, it renders literally.
+
+  Leave any of the three blank and the form degrades to the previous `mailto:` handoff, which is
+  also the automatic fallback if EmailJS is down or the send fails. A hidden `website` honeypot
+  field silently drops bot submissions.
 
 ## Quality
 
